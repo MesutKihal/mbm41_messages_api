@@ -11,6 +11,10 @@ import os
 from dotenv import load_dotenv
 
 
+@api_view(['GET'])
+def home(request):
+    return Response({"Description": "This API is used to processes messages coming from visitors of my personal website"})
+
 @api_view(['POST', 'GET'])
 def send(request):
     TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
