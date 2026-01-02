@@ -31,7 +31,10 @@ def send(request):
         message = "".join(messages)
         await send_message(message, chat_id)
 
-    sender = Sender.objects.get(Q(full_name=request.data['FULL_NAME']) | Q(email=request.data['EMAIL']) | Q(phone_number=request.data['PHONE_NUMBER']))
+    try:
+        sender = Sender.objects.get(Q(full_name=request.data['FULL_NAME']) | Q(email=request.data['EMAIL']) | Q(phone_number=request.data['PHONE_NUMBER']))
+    except:
+        sender = None
     messages  = [
                 "<b>Sender Information:</b>\n",
                 f"Full Name: {request.data['FULL_NAME']}\n",
@@ -46,7 +49,11 @@ def send(request):
     if messages:
         message = Message.objects.filter(sender=sender, date=date.today())
         if not message:
-            sender = Sender.objects.get(Q(full_name=request.data['FULL_NAME']) | Q(email=request.data['EMAIL']) | Q(phone_number=request.data['PHONE_NUMBER']))
+            try:
+                sender = Sender.objects.get(Q(full_name=request.data['FULL_NAME']) | Q(email=request.data['EMAIL']) | Q(phone_number=request.data['PHONE_NUMBER']))
+            except:
+                Sender.objects.create(full_name=request.data['FULL_NAME'], email=request.data['EMAIL'], phone_number=request.data['PHONE_NUMBER'])
+                sender = Sender.objects.get(Q(full_name=request.data['FULL_NAME']) | Q(email=request.data['EMAIL']) | Q(phone_number=request.data['PHONE_NUMBER']))
             Message.objects.create(sender=sender, content="".join(messages))
             asyncio.run(run_bot(messages, CHAT_ID))
             return Response({"response": "Message was sent successfully"})
