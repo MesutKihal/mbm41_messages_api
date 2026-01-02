@@ -23,7 +23,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'api'
+    'api',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -35,6 +36,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://localhost:8000",
+    "https://127.0.0.1:8000",
+    "https://mesutkihal.github.io"
 ]
 
 ROOT_URLCONF = 'mbm41_messages.urls'
@@ -101,7 +109,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-CSRF_TRUSTED_ORIGINS = ['https://mbm41-messages.fly.dev']
+CSRF_TRUSTED_ORIGINS = ['https://mbm41-messages.fly.dev', "mesutkihal.github.io"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
